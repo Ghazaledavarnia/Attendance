@@ -1,0 +1,37 @@
+﻿@model IEnumerable<EntranceExitViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="k-rtl">
+    @(Html.Kendo().Grid<EntranceExitViewModel>(Model)
+                                        .Name("ReportGride")
+                                        .ToolBar(tools => tools.Excel().Text("خروجی اکسل"))
+                                        .Columns(columns =>
+                                        {
+
+                                            columns.Bound(p => p.Username).Title("شناسه کاربر").Width(30);
+                                            columns.Bound(p => p.EntranceDate).Title("تاریخ").Width(30);
+                                            columns.Bound(p => p.EntranceTime).Title("ساعت ورود").Width(20);
+                                            columns.Bound(p => p.ExitTime).Title("ساعت خروج").Width(20);
+                                            columns.Bound(p => p.workTime).Title("ساعت حضور واقعی").Width(20);
+                                        })
+                                            .Navigatable()
+                                            //.Pageable(pageable => pageable
+                                            //.Refresh(true)
+                                            //.PageSizes(false)
+                                            //)
+                                            .Resizable(s => s.Columns(true))
+                                            .Scrollable(s => s.Enabled(true).Height(500))
+                                            .Scrollable()
+                                            .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .PageSize(1000)
+                                            .ServerOperation(false)
+                                            /*.Read(read => read.Action("Filter", "EntranceExits")*//*.Data("entranceExitList")*/)
+
+    )
+
+</div>

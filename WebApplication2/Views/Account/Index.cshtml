@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    string access = ViewBag.state;
+}
+<style>
+    .row {
+        margin-top: 30px !important;
+    }
+
+    .circle {
+        border-radius: 50% !important;
+        width: 150px;
+        height: 150px;
+        text-align: center !important;
+        /*margin-right:42px!important;*/
+    }
+
+    .text {
+        margin-right: 38px !important;
+        font-size: 28px !important;
+        /*margin-left: 36px !important;*/
+        /*text-align: center;*/
+    }
+
+    .customCss {
+        text-align: right;
+        font-size: 20px;
+        color: forestgreen !important;
+    }
+    a{
+        text-decoration:none!important;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header text-danger customCss" id="headerid">
+                <p>
+            <a asp-action="Details" asp-controller="EntranceExits" >گزارش</a>
+               </p>
+                @*<div class="validation-summary-valid " data-valmsg-summary="true">
+            <ul  id="validationError" style="color:red;list-style-type:none;"></ul>
+        </div>*@
+            </div>
+            <div class="body">
+                @{
+
+                    if (access == "Exister")
+                    {
+                        <button type="button" class="btn btn-danger waves-effect circle" onclick="ExitTime()" id="exitBtn">
+                            @*<i class="material-icons">home</i>*@
+                            <span class="text">خروج</span>
+                        </button>
+                    }
+                    if (access == "inner")
+                    {
+                        <button type="button" class="btn btn-success waves-effect circle" onclick="EntranceTime()" id="entryBtn">
+                            @*<i class="material-icons">lock</i>*@
+                            <span class="text">ورود</span>
+                        </button>
+                    }
+                }
+
+                @*<button type="button" class="btn btn-info waves-effect">*@
+
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_Script")
+@*@Html.Partial("_Report")*@

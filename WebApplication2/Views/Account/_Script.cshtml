@@ -1,0 +1,49 @@
+﻿<script>
+
+    function EntranceTime() {
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Account/RegisterEntrance",
+                success: function (data) {
+                    Confirm();
+                },
+                error: function (e) {
+                    swal("خطا", "لطفا دوباره وارد سایت شوید", "error");
+                }
+            });
+    }
+    function Confirm() {
+        swal({
+            title: "ثبت اطلاعات",
+            text: "اطلاعات با موفقیت ثبت شد.",
+            type: "success",
+            showCancelButton: false,
+            confirmButtonClass: "btn-success",
+            confirmButtonText: "تایید",
+            //cancelButtonText: "??????",
+            closeOnConfirm: true
+            //closeOnCancel: true
+        },
+            function (isConfirm) {
+                window.location = '/Account/Index'
+            });
+
+    }
+    function ExitTime() {
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Account/RegisterExit",
+                success: function (data) {
+                    Confirm();
+                },
+                error: function (error) {
+
+                    swal("خطا", "لطفا دوباره وارد سایت شوید", "error");
+                }
+            });
+    }
+
+</script>

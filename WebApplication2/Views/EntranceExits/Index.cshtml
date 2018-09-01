@@ -1,0 +1,82 @@
+﻿@*@model IEnumerable<WebApplication2.Models.EntranceExit>*@
+@using WebApplication2.Models.AccountViewModels
+@model EntranceExitViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>گزارش ماهانه</h2>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+
+<div class="row">
+    <form >
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-4 form-control-label controllabel">
+            <label for="DateFrom" asp-for="@Model.DateFrom" class="form-label"></label>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+            <div class="form-group">
+                <div class="form-line">
+                    <input asp-for="DateFrom" type="text" id="DateFrom" name="DateFrom" class="dpDatepicker" @*value="@ViewData[" startDate"]" readonly*@ />
+                    <script>
+                        kamaDatepicker('DateFrom', customOptions);
+                        //$("#DateFrom").val(retunDateNow());
+                    </script>
+                </div>
+                @*<span asp-validation-for="@Model.DateFrom" class="text-danger"></span>*@
+            </div>
+        </div>
+
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-4 form-control-label controllabel">
+            <label for="DateFrom" asp-for="@Model.DateTo" class="form-label"></label>
+            @*<label for="DateTo" asp-for="@model.DateTo"  class="form-label"></label>*@
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+            <div class="form-group">
+                <div class="form-line">
+                    <input asp-for="DateTo" type="text" id="DateTo" name="DateTo" class="dpDatepicker" @*value="@ViewData[" toDate"]" readonly*@ />
+                    <script>
+                        kamaDatepicker('DateTo', customOptions);
+                        //$("#DateTo").val(retunDateNow());
+                    </script>
+                </div>
+                @*<span asp-validation-for="@Model.DateTo" class="text-danger"></span>*@
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" onclick="filter()" id="btndate"> فیلتر</button>
+    </form>
+</div>
+
+<div id="ReportGrid"> 
+    @Html.Partial("_ReportGrid")
+</div>
+
+<script>
+    @*$(function ()
+    {
+         $("#ReportGrid").load('@Url.Action("AppearGrid", "EntranceExits")');
+    });*@
+
+    function filter()
+    { 
+        // var data = { 'DateFrom': $("#DateFrom").val(), 'DateTo': $("#DateTo").val(), }
+        $('#btndate').attr('disabled', true);
+        var prepared = $.param({ DateFrom: $('#DateFrom').val() }) + '&' + $.param({ DateTo: $('#DateTo').val() }) 
+        $.post('/EntranceExits/Filter', prepared)
+
+            .done(function (data)
+            {
+                $('#ReportGrid').html(data);
+                $('#btndate').attr('disabled', false);
+            }).fail(function (errors) {
+
+                swal("خطا", "در این تاریخ شخصی یافت نشد", "error");
+            });
+    }
+
+
+</script>
+

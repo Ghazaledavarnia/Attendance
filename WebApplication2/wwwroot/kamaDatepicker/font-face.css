@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'vazir';
+    src: url('../font/vazir.eot');
+    src: url('../font/vazir.eot?#iefix') format('embedded-opentype'), 
+        url('../font/vazir.woff2') format('woff2'), 
+        url('../font/vazir.woff') format('woff'), 
+        url('../font/vazir.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('../font/vazir-Bold.eot');
+    src: url('../font/vazir-Bold.eot?#iefix') format('embedded-opentype'), url('../font/vazir-Bold.woff2') format('woff2'), url('../font/vazir-Bold.woff') format('woff'), url('../font/vazir-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('../font/vazir-Light.eot');
+    src: url('../font/vazir-Light.eot?#iefix') format('embedded-opentype'), url('../font/vazir-Light.woff2') format('woff2'), url('../font/vazir-Light.woff') format('woff'), url('../font/vazir-Light.ttf') format('truetype');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('../font/vazir-Medium.eot');
+    src: url('../font/vazir-Medium.eot?#iefix') format('embedded-opentype'), url('../font/vazir-Medium.woff2') format('woff2'), url('../font/vazir-Medium.woff') format('woff'), url('../font/vazir-Medium.ttf') format('truetype');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'vazir';
+    src: url('../font/vazir-Thin.eot');
+    src: url('../font/vazir-Thin.eot?#iefix') format('embedded-opentype'), url('../font/vazir-Thin.woff2') format('woff2'), url('../font/vazir-Thin.woff') format('woff'), url('../font/vazir-Thin.ttf') format('truetype');
+    font-weight: 100;
+}
+@font-face {
+    font-family: 'magnetob';
+    src: url('../font/magnetob.ttf') format('truetype');
+}
+
+
+

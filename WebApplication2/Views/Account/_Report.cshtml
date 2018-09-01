@@ -1,0 +1,28 @@
+﻿@model List<EntranceExitViewModel>
+
+<div class="k-rtl">
+    @(Html.Kendo().Grid<EntranceExitViewModel>()
+                          .Name("ReportGride")
+                          .Columns(columns =>
+                          {
+                              columns.Bound(p => p.FirstName).Width(50);
+                              columns.Bound(p => p.EntranceDate).Width(30);
+                              columns.Bound(p => p.EntranceTime).Width(30);
+                              columns.Bound(p => p.ExitTime).Width(30);
+                             
+                          })
+                          //.Events(events => events.Edit("edit"))
+                          //.Editable(editable => editable.Mode(GridEditMode.InCell))
+                          .Navigatable()
+                          .Sortable()
+                          .Scrollable()
+                          // .Filterable()
+                          .DataSource(dataSource => dataSource
+                              //.Model(model => model.No(p => p.column1))
+                              .Ajax()
+                              .PageSize(10)
+                              .ServerOperation(false)
+                          //.Model(model => model.Field(p => p.No).Editable(false))
+                          )
+    )
+</div>
