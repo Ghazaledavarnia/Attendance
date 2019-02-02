@@ -16,13 +16,15 @@ namespace WebApplication2.Data
         }
         public DbSet<ApplicationUser> ApplicationUseres { get; set; }
         public DbSet<EntranceExit> EntranceExits { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(builder);
-        //    modelBuilder.Entity<ApplicationUser>().ToTable("Person");
-        //    modelBuilder.Entity<EntranceExit>().ToTable("EntranceExit")/*.HasKey(d => new { d.Id, d.IdP })*/;
-        //}
-        protected override void OnModelCreating(ModelBuilder builder)
+        public DbSet<Leave> Leave { get; set; }
+        public DbSet<LeaveType> LeaveType { get; set; }
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    base.OnModelCreating(builder);
+    //    modelBuilder.Entity<ApplicationUser>().ToTable("Person");
+    //    modelBuilder.Entity<EntranceExit>().ToTable("EntranceExit")/*.HasKey(d => new { d.Id, d.IdP })*/;
+    //}
+    protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
@@ -35,6 +37,12 @@ namespace WebApplication2.Data
             {
                 entity.ToTable("EntranceExit");
             });
+            //builder.Entity<Leave>().HasForeignKey(s =>s.);
+            //.HasOne<Grade>(s => s.Grade)
+            //.WithMany(g => g.Students)
+
+            //.OnDelete(DeleteBehavior.Cascade);
+
             // modelBuilder.Entity<EntranceExit>().ToTable("EntranceExit").HasKey(d => d.);
         }
 

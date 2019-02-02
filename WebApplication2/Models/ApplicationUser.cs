@@ -13,6 +13,7 @@ namespace WebApplication2.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<EntranceExit> EntranceExitList { get; set; }
+        public virtual ICollection<Leave> Leave { get; set; }
 
     }
    

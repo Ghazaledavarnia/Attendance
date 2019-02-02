@@ -1,0 +1,31 @@
+﻿@using WebApplication2.Models.EntranceExitViewModel
+@model HourlyLeaveViewModel
+
+<form id="hourlyForm">
+    <div class="form-group">
+        <label asp-for="@Model.RegistrationDate" for="RegistrationDate"></label>
+        <input asp-for="RegistrationDate" type="text" class="form-control dpDatepicker formClass" id="RegistrationDate">
+        <script>
+            kamaDatepicker('RegistrationDate', customOptions);
+        </script>
+        <span class="text-danger field-validation-valid" data-valmsg-for="RegistrationDate" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartTime" for="StartTime"></label>
+        <input asp-for="StartTime" type="text" class="form-control dpDatepicker formClass" id="StartTime">
+        <span class="text-danger field-validation-valid" data-valmsg-for="StartTime" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndTime" for="EndTime"></label>
+        <input asp-for="EndTime" type="text" class="form-control dpDatepicker formClass" id="EndTime">
+        <span class="text-danger field-validation-valid" data-valmsg-for="EndTime" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LeaveTypeH" for="LeaveTypeH"></label>
+        <select asp-for="LeaveTypeH" asp-items="@ViewBag.Leavetype" class="form-control formClass" id="LeaveTypeH">
+            <option value="" disabled selected>نوع مرخصی را وارد نمایید</option>
+        </select>
+        <span class="text-danger field-validation-valid" data-valmsg-for="LeaveTypeH" data-valmsg-replace="true"></span>
+    </div>
+    <button type="button" class="btn btn-primary" id="hourlybtn" onclick="hourlySubmit()">ثبت</button>
+</form>

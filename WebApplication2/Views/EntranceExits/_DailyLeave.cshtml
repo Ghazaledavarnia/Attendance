@@ -1,0 +1,32 @@
+﻿@using WebApplication2.Models.EntranceExitViewModel
+@model DailyLeaveViewModel
+
+
+    <form id="dailyForm">
+        <div class="form-group group">
+            <label asp-for="@Model.StartDate" for="StartDate"></label>
+            <input asp-for="StartDate" type="text" class="form-control dpDatepicker formClass" id="StartDate">
+            <span class="text-danger field-validation-valid" data-valmsg-for="StartDate" data-valmsg-replace="true"></span>
+            <script>
+                kamaDatepicker('StartDate', customOptions);
+            </script>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="@Model.EndDate" for="EndDate"></label>
+            <input asp-for="EndDate" type="text" class="form-control dpDatepicker formClass" id="EndDate">
+            <span class="text-danger field-validation-valid" data-valmsg-for="EndDate" data-valmsg-replace="true"></span>
+            <script>
+                kamaDatepicker('EndDate', customOptions);
+            </script>
+        </div>
+        <div class="form-group">
+            <label asp-for="LeaveTypeD" for="LeaveTypeD"></label>
+            <select asp-for="LeaveTypeD" asp-items="@ViewBag.Leavetype" class="form-control formClass" id="LeaveTypeD">
+                <option value="" disabled selected>نوع مرخصی را وارد نمایید</option>
+            </select>
+            <span class="text-danger field-validation-valid" data-valmsg-for="LeaveTypeD" data-valmsg-replace="true"></span>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="btndaily" onclick="dailySubmit()">ثبت</button>
+    </form>

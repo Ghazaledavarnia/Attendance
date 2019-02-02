@@ -11,9 +11,10 @@ using WebApplication2.Data;
 namespace WebApplication2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180929091637_leavetype")]
+    partial class leavetype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,17 +209,15 @@ namespace WebApplication2.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("AplicationUsersId");
 
                     b.Property<string>("EndDate");
 
                     b.Property<string>("EndTime");
 
-                    b.Property<string>("LeaveTypeId");
+                    b.Property<int?>("LeaveTypeId");
 
-                    b.Property<int?>("LeaveTypeId1");
-
-                    b.Property<string>("RegistrationDate");
+                    b.Property<int?>("LeavesId");
 
                     b.Property<string>("StartDate");
 
@@ -226,9 +225,11 @@ namespace WebApplication2.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("AplicationUsersId");
 
-                    b.HasIndex("LeaveTypeId1");
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("LeavesId");
 
                     b.ToTable("Leave");
                 });
@@ -299,13 +300,17 @@ namespace WebApplication2.Data.Migrations
 
             modelBuilder.Entity("WebApplication2.Models.Leave", b =>
                 {
-                    b.HasOne("WebApplication2.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("WebApplication2.Models.ApplicationUser", "AplicationUsers")
                         .WithMany("Leave")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("AplicationUsersId");
 
-                    b.HasOne("WebApplication2.Models.LeaveType", "LeaveType")
+                    b.HasOne("WebApplication2.Models.LeaveType")
                         .WithMany("Leave")
-                        .HasForeignKey("LeaveTypeId1");
+                        .HasForeignKey("LeaveTypeId");
+
+                    b.HasOne("WebApplication2.Models.Leave", "Leaves")
+                        .WithMany()
+                        .HasForeignKey("LeavesId");
                 });
 #pragma warning restore 612, 618
         }

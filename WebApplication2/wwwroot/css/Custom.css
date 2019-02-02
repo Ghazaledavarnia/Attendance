@@ -1,9 +1,65 @@
-﻿body {
+﻿@font-face {
+    font-family: 'iransansweb';
+    src: url('../fonts/iransansweb/iransansweb.eot') format('embedded-opentype'), url('../fonts/iransansweb/iransansweb.ttf') format('truetype'), url('../fonts/iransansweb/iransansweb.woff') format('woff'), url('../fonts/iransansweb/iransansweb.woff2') format('woff2')
 }
+
+@font-face {
+    font-family: 'iransansweb_bold';
+    src: url('../fonts/iransansweb/iransansweb_bold.eot') format('embedded-opentype'), url('../fonts/iransansweb/iransansweb_bold.ttf') format('truetype'), url('../fonts/iransansweb/iransansweb_bold.woff') format('woff'), url('../fonts/iransansweb/iransansweb_bold.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'iransansweb_medium';
+    src: url('../fonts/iransansweb/iransansweb_medium.eot') format('embedded-opentype'), url('../fonts/iransansweb/iransansweb_medium.ttf') format('truetype'), url('../fonts/iransansweb/iransansweb_medium.woff') format('woff'), url('../fonts/iransansweb/iransansweb_medium.woff2') format('woff2')
+}
+
+@font-face {
+    font-family: 'roboto';
+    src: url('../fonts/roboto/roboto-regular.ttf') format('truetype');
+}
+body {
+    font-family: "iransansweb","iransansweb_medium","roboto",Arial,sans-serif !important;
+    font-size: 17px !important;
+    line-height: 1.428571429 !important;
+    /*color: #333 !important;*/
+    background-color: #fff !important;
+    min-width: 380px;
+    direction: rtl !important;
+    text-align: right !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
 .sa-icon.sa-success.animate {
     margin-bottom: 30px!important;
 }
 h2,.h2 
 {
     margin-top:60px!important;
+}
+
+.cs {
+    border: 1px solid black !important;
+}
+
+.card {
+    margin-top: 50px;
+}
+    /*button.btn {
+    background: #ff471a !important;
+}*/
+    .navbar-inverse .navbar-nav > li > a {
+    color: white !important;
+}
+
+.navbar-inverse .btn-link {
+    color: white !important;
+}
+
+.navbar-inverse {
+    background-color: royalblue !important;
+}
+.nav-tabs > li {
+    float: right !important;
+    margin-bottom: -1px;
 }

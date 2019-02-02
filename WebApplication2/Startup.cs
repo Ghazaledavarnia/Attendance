@@ -13,6 +13,10 @@ using WebApplication2.Models;
 using WebApplication2.Services;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApplication2
 {
@@ -26,18 +30,18 @@ namespace WebApplication2
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-      
-            // This method gets called by the runtime. Use this method to add services to the container.
-            public void ConfigureServices(IServiceCollection services)
-            {
-                services.AddDbContext<ApplicationDbContext>(options =>
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+
+            services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-                services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-                services.Configure<IdentityOptions>(options =>
+            services.Configure<IdentityOptions>(options =>
                 {
                     // Password settings
                     options.Password.RequireDigit = true;
@@ -55,79 +59,38 @@ namespace WebApplication2
                     // User settings
                     options.User.RequireUniqueEmail = true;
                 });
-            //services.Configure<IISOptions>(options =>
-            //{
-            //    options.ForwardClientCertificate = false;
-            //});
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(op =>
+            {
+                op.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                op.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                    .AddJwtBearer(cfg =>
+                    {
+                        cfg.RequireHttpsMetadata = false;
+                        cfg.SaveToken = true;
+                        cfg.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidIssuer = Configuration["Tokens:Issuer"],
+                            ValidAudience = Configuration["Tokens:Issuer"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                        };
 
-            services.ConfigureApplicationCookie(options =>
-                {
-                    // Cookie settings
-                    options.Cookie.HttpOnly = true;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                    // If the LoginPath isn't set, ASP.NET Core defaults 
-                    // the path to /Account/Login.
-                    options.LoginPath = "/Account/Login";
-                    // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
-                    // the path to /Account/AccessDenied.
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                    options.SlidingExpiration = true;
-                });
+                    });
 
-                // Add application services.
-                services.AddTransient<IEmailSender, EmailSender>();
-            services
-            .AddMvc()
-            .AddJsonOptions(options =>
-            options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
-            // Add Kendo UI services to the services container
+            // Add application services.
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddKendo();
-
+            services.AddCors();
             services.AddMvc();
-        
+
         }
 
-        //services.AddDbContext<ApplicationDbContext>(options =>
-        //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-        //services.AddIdentity<ApplicationUser, IdentityRole>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>()
-        //    .AddDefaultTokenProviders();
-
-        //// Add application services.
-        //services.AddTransient<IEmailSender, EmailSender>();
-
-        //services.AddMvc();
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        //{
-        //    if (env.IsDevelopment())
-        //    {
-        //        app.UseDeveloperExceptionPage();
-        //        app.UseBrowserLink();
-        //        app.UseDatabaseErrorPage();
-        //    }
-        //    else
-        //    {
-        //        app.UseExceptionHandler("/Home/Error");
-        //    }
 
-        //    app.UseStaticFiles();
-
-        //    app.UseAuthentication();
-
-        //    app.UseMvc(routes =>
-        //    {
-        //        routes.MapRoute(
-        //            name: "default",
-        //            template: "{controller=Home}/{action=Index}/{id?}");
-        //    });
-        //}
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-       
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
@@ -144,14 +107,22 @@ namespace WebApplication2
             app.UseStaticFiles();
 
             app.UseAuthentication();
-            app.UseKendo(env);
 
+            app.UseKendo(env);
+            app.UseCors(p =>
+            {
+                p.AllowAnyOrigin()
+              .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Models;
 using WebApplication2.Models.AccountViewModels;
+using WebApplication2.Models.EntranceExitViewModel;
+using DNTPersianUtils.Core;
 
 namespace WebApplication2.Controllers
 {
@@ -39,12 +41,12 @@ namespace WebApplication2.Controllers
         /// <param name="DateTo"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Filter(string DateFrom,string DateTo)
+        public IActionResult Filter(string DateFrom, string DateTo)
         {
-        
-            if (DateFrom!=null && DateTo!=null)
-            { 
-           // CultureInfo info = new CultureInfo("fa-Ir");
+
+            if (DateFrom != null && DateTo != null)
+            {
+                // CultureInfo info = new CultureInfo("fa-Ir");
                 //var applicationDbContext = _context.EntranceExits.Include(e => e.ApplicationUser)
                 //    .Where(
                 //    s =>
@@ -56,66 +58,50 @@ namespace WebApplication2.Controllers
                 //.ToList();
                 var applicationDbContext = _context.EntranceExits.Include(e => e.ApplicationUser)
                     .Where(s => s.EntranceDate.CompareTo(DateFrom) >= 0 && s.EntranceDate.CompareTo(DateTo) <= 0).OrderBy(e => e.ApplicationUser.Email).ToList();
-                if (applicationDbContext!=null)
-                { 
-                var entranceExitList = new List<EntranceExitViewModel>();
-            foreach (var item in applicationDbContext)
-            {
-                var time1 = item.EntranceTime;
-                var time2 = item.ExitTime;
-                string def = "";
-                if (time2 == null)
+                if (applicationDbContext != null)
                 {
-                    def = "0";
-                }
-                else
-                {
-                    var time1dt = Convert.ToDateTime(time1);
-                    var time2dt = Convert.ToDateTime(time2);
-                    def = time2dt.Subtract(time1dt).ToString();
-                }
-                EntranceExitViewModel entranceExitListdish = new EntranceExitViewModel()
-                {
-                    Username = item.ApplicationUser.UserName,
-                    EntranceDate = item.EntranceDate,
-                    FirstName = item.ApplicationUser.FirstName,
-                    LastName = item.ApplicationUser.LastName,
-                    EntranceTime = item.EntranceTime,
-                    ExitTime = item.ExitTime,
-                    Id = item.Id,
-                    workTime = def
-                };
-                entranceExitList.Add(entranceExitListdish);
-            }
+                    var entranceExitList = new List<EntranceExitViewModel>();
+                    foreach (var item in applicationDbContext)
+                    {
+                        var time1 = item.EntranceTime;
+                        var time2 = item.ExitTime;
+                        string def = "";
+                        if (time2 == null)
+                        {
+                            def = "0";
+                        }
+                        else
+                        {
+                            var time1dt = Convert.ToDateTime(time1);
+                            var time2dt = Convert.ToDateTime(time2);
+                            def = time2dt.Subtract(time1dt).ToString();
+                        }
+                        EntranceExitViewModel entranceExitListdish = new EntranceExitViewModel()
+                        {
+                            Username = item.ApplicationUser.UserName,
+                            EntranceDate = item.EntranceDate,
+                            FirstName = item.ApplicationUser.FirstName,
+                            LastName = item.ApplicationUser.LastName,
+                            EntranceTime = item.EntranceTime,
+                            ExitTime = item.ExitTime,
+                            Id = item.Id,
+                            workTime = def
+                        };
+                        entranceExitList.Add(entranceExitListdish);
+                    }
 
-             return PartialView("_ReportGrid", entranceExitList);
+                    return PartialView("_ReportGrid", entranceExitList);
                 }
                 return BadRequest();
             }
 
             return BadRequest();
         }
+
         // GET: EntranceExits/Details/5
         public IActionResult Details()
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var entranceExitlist = await _context.EntranceExits
-            //    .Include(e => e.ApplicationUser)
-            //    .SingleOrDefaultAsync(m => m.Id == id);
-            //var dish = new EntranceExitViewModel();
-            //dish.EntranceDate = entranceExitlist.EntranceDate;
-            //dish.EntranceTime = entranceExitlist.EntranceTime;
-            //dish.ExitTime = entranceExitlist.ExitTime;
-            //dish.FirstName = entranceExitlist.ApplicationUser.FirstName;
-            //dish.LastName = entranceExitlist.ApplicationUser.LastName;
-            //if (entranceExitlist == null)
-            //{
-            //    return NotFound();
-            //}
+          
             return View();
         }
         ///_context.EntranceExits.Include(e => e.ApplicationUser)
@@ -132,10 +118,10 @@ namespace WebApplication2.Controllers
             if (DateFrom != null && DateTo != null)
             {
                 var check = user.UserName;
-                if(check!= "mm.940601@gmail.com")
-                { 
-                  var applicationDbContext = _context.EntranceExits.Include(e => e.ApplicationUser)
-                    .Where(s => s.EntranceDate.CompareTo(DateFrom) >= 0 && s.EntranceDate.CompareTo(DateTo) <= 0 && s.ApplicationUserId==user.Id).ToList();
+                if (check != "mm.940601@gmail.com")
+                {
+                    var applicationDbContext = _context.EntranceExits.Include(e => e.ApplicationUser)
+                      .Where(s => s.EntranceDate.CompareTo(DateFrom) >= 0 && s.EntranceDate.CompareTo(DateTo) <= 0 && s.ApplicationUserId == user.Id).ToList();
                     if (applicationDbContext != null)
                     {
                         var entranceExitList = new List<EntranceExitViewModel>();
@@ -216,6 +202,96 @@ namespace WebApplication2.Controllers
             }
 
             return BadRequest();
+        }
+
+        public IActionResult Leave()
+        {
+            ViewBag.Leavetype = _context.LeaveType.Select(s => new SelectListItem()
+            {
+                Text = s.Name,
+                Value = s.Id.ToString()
+
+            }).ToList();
+            return View();
+        }
+        /// <summary>
+        /// ثبت مرخصی روزانه
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> SubmitLeaveDaily(DailyLeaveViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var registriondate = DateTime.Now.Date.ToString();
+                var stdate = model.StartDate;
+                var endate = model.EndDate;
+                DateTime dtst = DateTime.Parse(stdate, new CultureInfo("fa-IR"));
+                DateTime dten = DateTime.Parse(endate, new CultureInfo("fa-IR"));
+                string startdate = dtst.ToString("yyyy/MM/dd");
+                string enddate = dten.ToString("yyyy/MM/dd");
+
+                var check = _context.LeaveType.Where(s => s.Id == model.LeaveTypeD).FirstOrDefault();
+                if (check != null && user != null)
+                {
+                    var regist = new Leave()
+                    {
+                        ApplicationUserId = user.Id,
+                        LeaveTypeId = model.LeaveTypeD.ToString(),
+                        RegistrationDate = registriondate,
+                        StartDate = startdate,
+                        EndDate = enddate,
+                        //StartTime = model.StartTime,
+                        //EndTime = model.EndTime,
+
+                    };
+                    _context.Add(regist);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                ModelState.AddModelError("Err", "خطا");
+                return BadRequest(ModelState);
+            }
+            return BadRequest(ModelState);
+        }
+   
+    
+        /// <summary>
+        /// ثبت مرخصی ساعتی
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> SubmitLeaveHourly(HourlyLeaveViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var conRegisdate = model.RegistrationDate;
+                DateTime dt = DateTime.Parse(conRegisdate, new CultureInfo("fa-IR"));
+                var strRegisdt = dt.ToString("yyyy/MM/dd");
+                if ( user != null)
+                {
+                    var regist = new Leave()
+                    {
+                        ApplicationUserId = user.Id,
+                        LeaveTypeId = model.LeaveTypeH.ToString(),
+                        RegistrationDate = strRegisdt,
+                        //StartDate = model.StartDate,
+                        //EndDate = model.EndDate,
+                        StartTime = model.StartTime,
+                        EndTime = model.EndTime,
+
+                    };
+                    _context.Add(regist);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+               
+            }
+            return BadRequest(ModelState);
         }
         // GET: EntranceExits/Create
         public IActionResult Create()

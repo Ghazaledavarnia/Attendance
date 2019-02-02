@@ -36,33 +36,27 @@
         <div class="card">
             <div class="header text-danger customCss" id="headerid">
                 <p>
-            <a asp-action="Details" asp-controller="EntranceExits" >گزارش</a>
-               </p>
-                @*<div class="validation-summary-valid " data-valmsg-summary="true">
-            <ul  id="validationError" style="color:red;list-style-type:none;"></ul>
-        </div>*@
+                    <a asp-action="Details" asp-controller="EntranceExits">گزارش</a>
+                </p>
+                <p>
+                    <a asp-action="Leave" asp-controller="EntranceExits">مرخصی</a>
+                </p>
             </div>
             <div class="body">
                 @{
-
                     if (access == "Exister")
                     {
                         <button type="button" class="btn btn-danger waves-effect circle" onclick="ExitTime()" id="exitBtn">
-                            @*<i class="material-icons">home</i>*@
                             <span class="text">خروج</span>
                         </button>
                     }
                     if (access == "inner")
                     {
                         <button type="button" class="btn btn-success waves-effect circle" onclick="EntranceTime()" id="entryBtn">
-                            @*<i class="material-icons">lock</i>*@
                             <span class="text">ورود</span>
                         </button>
                     }
                 }
-
-                @*<button type="button" class="btn btn-info waves-effect">*@
-
             </div>
         </div>
     </div>

@@ -1,0 +1,82 @@
+﻿<script>
+    function dailySubmit()
+    {
+        $('#btndaily').attr('disabled', true);
+        var data = $('#dailyForm').serialize();
+        $.post("/EntranceExits/SubmitLeaveDaily",data)
+            .done(function () {
+             
+                conform();
+            
+            })
+            .fail(function (errors) {
+                debugger;
+                $('span.text-danger.field-validation-valid').text('');
+                var data;
+                try {
+                    data = JSON.parse(errors.responseText);
+                    if (data["Err"] !== undefined) {
+                        swal("خطا", data["Err"], "error");
+                    }
+                    var selecCommonclass = $(".formClass");
+                    for (var i = 0; i < selecCommonclass.length; i++) {
+                        var id = selecCommonclass[i].id;
+                        $('#' + id).parents('.group').addClass('error');
+                        $('span[data-valmsg-for="' + id + '"]').text(data[id]);
+                        //$('#agentForm').addClass('error');
+                        //$('input[name=id]').find('span[data-valmsg-for="' + id + '"]').text(data[id]);
+                    }
+                }
+                catch (e) {
+                    data = errors.responseText;
+                }
+                $('#btndaily').attr('disabled', false);
+
+            });
+    }
+    function conform()
+    {
+        swal({
+            title: "تایید",
+            text: "با موفقیت ثبت شد",
+            type: "success",
+            confirmButtonClass: "btn-success",
+            confirmButtonText: "ثبت",
+            closeOnConfirm: true
+        },
+            function (isConfirm) {
+                window.location = '/Account/Index'
+            });
+    }
+    function hourlySubmit()
+    {
+        $('#hourlybtn').attr('disabled',true);
+        var data = $('#hourlyForm').serialize();
+        $.post("/EntranceExits/SubmitLeaveHourly", data)
+            .done(function () {
+                conform();
+            })
+            .fail(function (errors) {
+                $('span.text-danger.field-validation-valid').text('');
+                var data;
+                try {
+                    data = JSON.parse(errors.responseText);
+                    if (data["Err"] !== undefined) {
+                        swal("خطا", data["Err"], "error");
+                    }
+                    var selecCommonclass = $(".formClass");
+                    for (var i = 0; i < selecCommonclass.length; i++) {
+                        var id = selecCommonclass[i].id;
+                        $('#' + id).parents('.group').addClass('error');
+                        $('span[data-valmsg-for="' + id + '"]').text(data[id]);
+                        //$('#agentForm').addClass('error');
+                        //$('input[name=id]').find('span[data-valmsg-for="' + id + '"]').text(data[id]);
+                    }
+                }
+                catch (e) {
+                    data = errors.responseText;
+                }
+                $('#hourlybtn').attr('disabled', false);
+             });
+    }
+</script>
